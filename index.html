@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Sahil & Shahin's Train Game</title>
     <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;800;900&display=swap" rel="stylesheet">
     <style>
@@ -18,29 +18,28 @@
             --rubber-seal: #222;
         }
 
-        * { 
-            box-sizing: border-box; 
+        /* HARD RESET FOR NO SCROLLING */
+        html, body {
             margin: 0; 
             padding: 0; 
+            width: 100%; 
+            height: 100dvh; /* Dynamic viewport height fixes the mobile address bar issue */
+            overflow: hidden; 
+            overscroll-behavior: none; /* Stops the pull-to-refresh bounce */
+            touch-action: none;
             user-select: none; 
             -webkit-tap-highlight-color: transparent; 
         }
 
-        /* FIXED HEIGHT FOR MOBILE APP FEEL */
         body {
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            width: 100%; height: 100%;
             background: linear-gradient(135deg, #111827 0%, #000000 100%);
             display: flex; justify-content: center; align-items: center;
-            overflow: hidden; 
-            font-family: 'Baloo 2', cursive; 
-            color: #334155;
+            font-family: 'Baloo 2', cursive; color: #334155;
         }
 
         #phone-screen {
             width: 100%; 
-            height: 100%; /* Locks to the exact viewport height */
+            height: 100%; 
             max-width: 420px; 
             background-color: var(--metal-light);
             position: relative; display: flex; flex-direction: column; overflow: hidden;
@@ -49,48 +48,43 @@
 
         @media (min-width: 450px) { 
             #phone-screen { 
-                height: 90%; 
-                max-height: 850px;
+                height: 90dvh; 
                 border-radius: 30px; 
                 border: 8px solid #1f2937; 
             } 
         }
 
-        /* --- LED Indicator --- */
+        /* --- LED Indicator (Scaled down slightly) --- */
         #led-container {
             background: #0a0a0a; color: var(--led-red); font-family: 'Courier New', monospace;
-            font-weight: 900; font-size: 1rem; padding: 5px 0; text-shadow: 0 0 8px var(--led-red);
-            border-bottom: 4px solid #000; z-index: 20; letter-spacing: 2px; overflow: hidden; white-space: nowrap; box-shadow: inset 0 0 10px rgba(0,0,0,0.8);
+            font-weight: 900; font-size: 0.9rem; padding: 4px 0; text-shadow: 0 0 6px var(--led-red);
+            border-bottom: 3px solid #000; z-index: 20; letter-spacing: 2px; overflow: hidden; white-space: nowrap; flex-shrink: 0;
         }
         .scrolling-text { display: inline-block; padding-left: 100%; animation: scroll-left 12s linear infinite; }
         @keyframes scroll-left { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
 
-        /* --- Authentic Ceiling Hardware --- */
+        /* --- Authentic Ceiling Hardware (Scaled down) --- */
         #ceiling-rig {
-            height: 70px; background: linear-gradient(180deg, #f8fafc, #cbd5e1);
-            border-bottom: 4px solid var(--metal-heavy); display: flex; flex-direction: column; position: relative; z-index: 15;
-            box-shadow: 0 6px 10px rgba(0,0,0,0.3);
+            height: 55px; background: linear-gradient(180deg, #f8fafc, #cbd5e1);
+            border-bottom: 3px solid var(--metal-heavy); display: flex; flex-direction: column; position: relative; z-index: 15; flex-shrink: 0;
         }
         
-        .ceiling-fixtures { display: flex; justify-content: space-around; align-items: center; height: 35px; padding: 0 10px; }
+        .ceiling-fixtures { display: flex; justify-content: space-around; align-items: center; height: 30px; padding: 0 10px; }
         .fan-grill {
-            width: 35px; height: 35px; border-radius: 50%; background: #111;
-            border: 3px solid var(--metal-heavy); position: relative;
+            width: 28px; height: 28px; border-radius: 50%; background: #111;
+            border: 2px solid var(--metal-heavy); position: relative;
             background-image: repeating-conic-gradient(from 0deg, #222 0deg 20deg, #111 20deg 40deg);
-            box-shadow: inset 0 0 10px rgba(0,0,0,0.8), 0 2px 4px rgba(0,0,0,0.2);
         }
-        .fan-grill::after { content:''; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:12px; height:12px; background:var(--metal-dark); border-radius:50%; }
-        
-        .tube-light { width: 70px; height: 10px; background: #fff; border-radius: 2px; box-shadow: 0 0 12px #fff, inset 0 0 4px #e2e8f0; border: 1px solid var(--metal-base); }
+        .tube-light { width: 60px; height: 8px; background: #fff; border-radius: 2px; box-shadow: 0 0 8px #fff; border: 1px solid var(--metal-base); }
 
-        .grab-rail { width: 100%; height: 5px; background: linear-gradient(180deg, #f1f5f9, #94a3b8); margin-top: 5px; box-shadow: 0 3px 5px rgba(0,0,0,0.4); position: relative; display: flex; justify-content: space-evenly;}
+        .grab-rail { width: 100%; height: 4px; background: linear-gradient(180deg, #f1f5f9, #94a3b8); margin-top: 2px; position: relative; display: flex; justify-content: space-evenly;}
         .handle-assembly { display: flex; flex-direction: column; align-items: center; transform-origin: top; animation: sway 2.5s infinite alternate ease-in-out; }
         .handle-assembly:nth-child(even) { animation-delay: 0.5s; }
-        .strap { width: 6px; height: 15px; background: #475569; border-radius: 2px; box-shadow: inset 1px 0 2px rgba(0,0,0,0.5); }
-        .loop { width: 30px; height: 35px; border: 4px solid var(--metal-heavy); border-radius: 6px 6px 15px 15px; box-shadow: inset 0 -2px 4px rgba(0,0,0,0.3), 0 3px 4px rgba(0,0,0,0.2); }
+        .strap { width: 5px; height: 12px; background: #475569; }
+        .loop { width: 24px; height: 28px; border: 3px solid var(--metal-heavy); border-radius: 4px 4px 12px 12px; }
         @keyframes sway { 0% { transform: rotate(-8deg); } 100% { transform: rotate(8deg); } }
 
-        /* --- Diorama / Scene --- */
+        /* --- Diorama / Scene (Flex 1 ensures it fills exact remaining space) --- */
         #diorama { flex: 1; position: relative; display: flex; flex-direction: column; justify-content: flex-end; background: var(--metal-base); min-height: 0; }
         
         .metal-wall {
@@ -99,41 +93,41 @@
         }
         
         .luggage-rack {
-            position: absolute; top: 0; left: 0; width: 100%; height: 40px;
+            position: absolute; top: 0; left: 0; width: 100%; height: 35px;
             background: repeating-linear-gradient(0deg, var(--metal-dark), var(--metal-dark) 4px, transparent 4px, transparent 12px);
-            border-bottom: 5px solid var(--metal-heavy); box-shadow: 0 8px 15px rgba(0,0,0,0.4); z-index: 5;
+            border-bottom: 4px solid var(--metal-heavy); z-index: 5;
         }
 
         .window-frame-container {
-            position: absolute; top: 55px; left: 30px; right: 30px; height: 40%;
-            background: var(--rubber-seal); padding: 8px; border-radius: 12px;
-            box-shadow: 0 0 0 6px var(--metal-heavy), 0 8px 20px rgba(0,0,0,0.3); z-index: 2;
+            position: absolute; top: 45px; left: 25px; right: 25px; height: 42%;
+            background: var(--rubber-seal); padding: 6px; border-radius: 10px;
+            box-shadow: 0 0 0 5px var(--metal-heavy), 0 5px 15px rgba(0,0,0,0.3); z-index: 2;
         }
-        .window-glass { background: linear-gradient(to bottom, #ff9a9e, #a1c4fd); width: 100%; height: 100%; border-radius: 4px; position: relative; overflow: hidden; box-shadow: inset 0 0 25px rgba(0,0,0,0.5); }
+        .window-glass { background: linear-gradient(to bottom, #ff9a9e, #a1c4fd); width: 100%; height: 100%; border-radius: 3px; position: relative; overflow: hidden; box-shadow: inset 0 0 20px rgba(0,0,0,0.4); }
         .window-bars { position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: flex; flex-direction: column; justify-content: space-evenly; z-index: 4; pointer-events: none; }
-        .bar { height: 6px; background: linear-gradient(to bottom, #f8fafc 0%, #94a3b8 60%, #475569 100%); box-shadow: 0 4px 6px rgba(0,0,0,0.6); }
+        .bar { height: 5px; background: linear-gradient(to bottom, #f8fafc 0%, #94a3b8 60%, #475569 100%); box-shadow: 0 3px 5px rgba(0,0,0,0.5); }
         
         .scenery-city {
             position: absolute; bottom: 0; left: 0; width: 200%; height: 60%;
             background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 100"><rect x="10" y="40" width="30" height="60" fill="%231e293b"/><rect x="50" y="20" width="40" height="80" fill="%230f172a"/><rect x="100" y="50" width="35" height="50" fill="%23334155"/><path d="M160 100 V30 Q170 10 180 30 V100" fill="%231e293b"/><rect x="220" y="30" width="45" height="70" fill="%230f172a"/><rect x="280" y="10" width="30" height="90" fill="%231e293b"/></svg>');
             background-repeat: repeat-x; background-size: contain; background-position: bottom; animation: moveLeft 5s linear infinite; z-index: 2; opacity: 0.8;
         }
-        .electric-pole { position: absolute; top: 0; width: 14px; height: 100%; background: linear-gradient(90deg, #1e293b, #000); box-shadow: -5px 0 15px rgba(0,0,0,0.8); z-index: 3; right: -50px; animation: flashBy 0.8s linear infinite; }
+        .electric-pole { position: absolute; top: 0; width: 10px; height: 100%; background: linear-gradient(90deg, #1e293b, #000); box-shadow: -5px 0 10px rgba(0,0,0,0.8); z-index: 3; right: -50px; animation: flashBy 0.8s linear infinite; }
         @keyframes flashBy { 0% { transform: translateX(50px); } 100% { transform: translateX(-500px); } }
         @keyframes moveLeft { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 
-        /* The Mumbai Local Bench */
+        /* --- The Mumbai Local Bench --- */
         .train-bench {
             height: 38%; width: 100%; position: relative; z-index: 3; display: flex; flex-direction: column;
         }
         .bench-metal-back {
             flex: 1; width: 100%; background: linear-gradient(180deg, var(--metal-light), var(--metal-dark));
-            border-top: 4px solid var(--metal-heavy); box-shadow: inset 0 15px 15px rgba(0,0,0,0.1), 0 -8px 15px rgba(0,0,0,0.3);
-            border-radius: 12px 12px 0 0; position: relative;
+            border-top: 3px solid var(--metal-heavy); box-shadow: inset 0 15px 15px rgba(0,0,0,0.1), 0 -5px 10px rgba(0,0,0,0.2);
+            border-radius: 10px 10px 0 0; position: relative;
         }
         .bench-seat-cushion {
-            height: 50%; width: 100%; background: var(--seat-blue); border-top: 5px solid var(--seat-blue-dark);
-            box-shadow: inset 0 10px 15px rgba(255,255,255,0.1), 0 -4px 12px rgba(0,0,0,0.4);
+            height: 50%; width: 100%; background: var(--seat-blue); border-top: 4px solid var(--seat-blue-dark);
+            box-shadow: inset 0 10px 15px rgba(255,255,255,0.1), 0 -4px 10px rgba(0,0,0,0.4);
             background-image: repeating-linear-gradient(90deg, transparent, transparent 20px, rgba(0,0,0,0.05) 20px, rgba(0,0,0,0.05) 22px);
             position: relative;
         }
@@ -141,53 +135,53 @@
         /* Movie Ticket */
         .movie-ticket {
             position: absolute; bottom: 20%; left: 50%; transform: translateX(-50%) rotate(-8deg); 
-            padding: 5px 12px; background: #fde047; border: 2px dashed #ca8a04; z-index: 5; 
-            box-shadow: 2px 2px 6px rgba(0,0,0,0.4); display: flex; justify-content: center; 
-            align-items: center; font-size: 0.85rem; font-weight: 900; color: #854d0e; 
-            border-radius: 3px; letter-spacing: 0.5px; white-space: nowrap;
+            padding: 4px 10px; background: #fde047; border: 2px dashed #ca8a04; z-index: 5; 
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.4); display: flex; justify-content: center; 
+            align-items: center; font-size: 0.75rem; font-weight: 900; color: #854d0e; 
+            border-radius: 3px; white-space: nowrap;
         }
         .movie-ticket::before, .movie-ticket::after { 
-            content: ''; position: absolute; width: 12px; height: 12px; background: var(--seat-blue); 
+            content: ''; position: absolute; width: 10px; height: 10px; background: var(--seat-blue); 
             border-radius: 50%; top: 50%; transform: translateY(-50%); box-shadow: inset 0 2px 4px rgba(0,0,0,0.4);
         }
-        .movie-ticket::before { left: -6px; } .movie-ticket::after { right: -6px; }
+        .movie-ticket::before { left: -5px; } .movie-ticket::after { right: -5px; }
 
         /* --- Clean UI Overlay --- */
         #ui-layer {
-            position: absolute; top: 42px; left: 12px; right: 12px;
+            position: absolute; top: 10px; left: 10px; right: 10px;
             display: flex; justify-content: space-between; z-index: 50; pointer-events: none;
         }
         #scoreboard, #game-status {
-            background: rgba(255,255,255,0.92); padding: 4px 12px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.25);
-            font-size: 0.9rem; font-weight: 800; display: flex; gap: 8px; backdrop-filter: blur(4px);
+            background: rgba(255,255,255,0.92); padding: 3px 10px; border-radius: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            font-size: 0.85rem; font-weight: 800; display: flex; gap: 6px; backdrop-filter: blur(4px);
         }
         #scoreboard { border: 2px solid var(--cute-pink); }
         .score-sahil { color: #1e293b; } .score-shahin { color: #2563eb; }
         #game-status { color: #ff4757; border: 2px solid #fecfef; }
 
         /* Moves (Floating in Center) */
-        .moves-layer { position: absolute; top: 18%; width: 100%; display: flex; justify-content: space-around; z-index: 25; pointer-events: none;}
+        .moves-layer { position: absolute; top: 20%; width: 100%; display: flex; justify-content: space-around; z-index: 25; pointer-events: none;}
         .move-bubble {
-            width: 65px; height: 65px; background: white; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 2.6rem; 
-            box-shadow: 0 8px 15px rgba(0,0,0,0.3); opacity: 0; transform: translateY(15px) scale(0.5); transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border: 4px solid #f8fafc;
+            width: 55px; height: 55px; background: white; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 2.2rem; 
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3); opacity: 0; transform: translateY(15px) scale(0.5); transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 3px solid #f8fafc;
         }
         .move-bubble.show { opacity: 1; transform: translateY(0) scale(1); }
 
         /* --- Characters --- */
         .characters-container {
-            position: absolute; bottom: 8%; left: 0; width: 100%; height: 50%; 
+            position: absolute; bottom: 8%; left: 0; width: 100%; height: 55%; 
             display: flex; justify-content: space-evenly; align-items: flex-end; z-index: 40; pointer-events: none;
         }
         .character-full { 
-            width: 45%; max-width: 170px; height: 100%; position: relative; 
+            width: 42%; max-width: 150px; height: 100%; position: relative; 
             transform-origin: bottom center; animation: bodySway 2s infinite alternate ease-in-out; 
             display: flex; justify-content: center; align-items: flex-end;
         }
         .character-full:nth-child(2) { animation-delay: -1s; }
         @keyframes bodySway { 0% { transform: rotate(-1deg) translateY(2px); } 100% { transform: rotate(1deg) translateY(-2px); } }
         
-        .char-svg { width: 100%; max-height: 100%; display: block; overflow: visible; filter: drop-shadow(0 15px 10px rgba(0,0,0,0.5)); }
+        .char-svg { width: 100%; max-height: 100%; display: block; overflow: visible; filter: drop-shadow(0 10px 8px rgba(0,0,0,0.4)); }
         
         .char-svg .eyes-normal, .char-svg .mouth-normal, .char-svg .eyes-action, .char-svg .mouth-action, .char-svg .eyes-sad, .char-svg .mouth-sad { transition: opacity 0.2s; }
         .char-svg .eyes-action, .char-svg .mouth-action, .char-svg .eyes-sad, .char-svg .mouth-sad { opacity: 0; }
@@ -199,89 +193,48 @@
 
         /* --- COMIC STYLE SPEECH BUBBLES --- */
         .speech-bubble {
-            position: absolute;
-            top: -15px;
-            background: #fff;
-            padding: 6px 12px;
-            border-radius: 18px;
-            font-size: 1rem;
-            font-weight: 900;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.4);
-            opacity: 0;
-            z-index: 100;
-            white-space: nowrap;
-            border: 3px solid;
+            position: absolute; top: -10px;
+            background: #fff; padding: 5px 10px; border-radius: 15px;
+            font-size: 0.95rem; font-weight: 900; box-shadow: 0 8px 15px rgba(0,0,0,0.4);
+            opacity: 0; z-index: 100; white-space: nowrap; border: 2px solid;
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
+        #sahil-speech { left: 20%; border-color: #3b82f6; color: #1e3a8a; transform: scale(0) rotate(-6deg); transform-origin: bottom left; }
+        #sahil-speech.show-speech { opacity: 1; transform: scale(1) rotate(-6deg) translateY(-20px); }
+        #sahil-speech::after { content: ''; position: absolute; bottom: -8px; left: 15px; border-width: 10px 8px 0; border-style: solid; border-color: #3b82f6 transparent transparent transparent; }
+        #sahil-speech::before { content: ''; position: absolute; bottom: -4px; left: 17px; border-width: 6px 5px 0; border-style: solid; border-color: #fff transparent transparent transparent; z-index: 1; }
         
-        /* Sahil's Bubble (Left side, tilts left) */
-        #sahil-speech {
-            left: 20%;
-            border-color: #3b82f6; 
-            color: #1e3a8a;
-            transform: scale(0) rotate(-6deg);
-            transform-origin: bottom left;
-        }
-        #sahil-speech.show-speech {
-            opacity: 1;
-            transform: scale(1) rotate(-6deg) translateY(-25px);
-        }
-        #sahil-speech::after {
-            content: ''; position: absolute; bottom: -11px; left: 20px;
-            border-width: 12px 10px 0; border-style: solid; border-color: #3b82f6 transparent transparent transparent;
-        }
-        #sahil-speech::before {
-            content: ''; position: absolute; bottom: -5px; left: 23px;
-            border-width: 7px 6px 0; border-style: solid; border-color: #fff transparent transparent transparent; z-index: 1;
-        }
-        
-        /* Shahin's Bubble (Right side, tilts right) */
-        #shahin-speech {
-            right: 20%;
-            border-color: #ec4899; 
-            color: #831843;
-            transform: scale(0) rotate(6deg);
-            transform-origin: bottom right;
-        }
-        #shahin-speech.show-speech {
-            opacity: 1;
-            transform: scale(1) rotate(6deg) translateY(-25px);
-        }
-        #shahin-speech::after {
-            content: ''; position: absolute; bottom: -11px; right: 20px;
-            border-width: 12px 10px 0; border-style: solid; border-color: #ec4899 transparent transparent transparent;
-        }
-        #shahin-speech::before {
-            content: ''; position: absolute; bottom: -5px; right: 23px;
-            border-width: 7px 6px 0; border-style: solid; border-color: #fff transparent transparent transparent; z-index: 1;
-        }
+        #shahin-speech { right: 20%; border-color: #ec4899; color: #831843; transform: scale(0) rotate(6deg); transform-origin: bottom right; }
+        #shahin-speech.show-speech { opacity: 1; transform: scale(1) rotate(6deg) translateY(-20px); }
+        #shahin-speech::after { content: ''; position: absolute; bottom: -8px; right: 15px; border-width: 10px 8px 0; border-style: solid; border-color: #ec4899 transparent transparent transparent; }
+        #shahin-speech::before { content: ''; position: absolute; bottom: -4px; right: 17px; border-width: 6px 5px 0; border-style: solid; border-color: #fff transparent transparent transparent; z-index: 1; }
 
-        .reaction-icon { position: absolute; top: -10px; right: 0px; font-size: 1.8rem; opacity: 0; transform: scale(0); transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55); filter: drop-shadow(0 3px 6px rgba(0,0,0,0.4)); z-index: 30; }
+        .reaction-icon { position: absolute; top: 0px; right: 0px; font-size: 1.5rem; opacity: 0; transform: scale(0); transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55); filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4)); z-index: 30; }
         .show-reaction { opacity: 1; transform: scale(1); }
 
-        /* --- Controls --- */
-        #controls-section { background: var(--metal-dark); padding: 15px; border-top: 5px solid #475569; z-index: 50; position: relative; box-shadow: 0 -10px 20px rgba(0,0,0,0.6); }
-        .controls-header { color: #fff; text-align: center; font-size: 1.05rem; font-weight: 900; margin-bottom: 10px; text-shadow: 0 2px 4px rgba(0,0,0,0.6);}
-        .button-group { display: flex; justify-content: space-between; gap: 12px; }
+        /* --- Controls (Scaled Down) --- */
+        #controls-section { background: var(--metal-dark); padding: 12px; border-top: 4px solid #475569; z-index: 50; position: relative; box-shadow: 0 -8px 15px rgba(0,0,0,0.5); flex-shrink: 0;}
+        .controls-header { color: #fff; text-align: center; font-size: 0.95rem; font-weight: 900; margin-bottom: 8px; text-shadow: 0 2px 4px rgba(0,0,0,0.6);}
+        .button-group { display: flex; justify-content: space-between; gap: 10px; }
         .rps-btn {
-            flex: 1; background: white; border: none; border-radius: 18px; padding: 12px 0; font-size: 2.5rem;
-            box-shadow: 0 6px 0 var(--metal-heavy), 0 10px 15px rgba(0,0,0,0.4); cursor: pointer; transition: all 0.1s; display: flex; justify-content: center; align-items: center;
+            flex: 1; background: white; border: none; border-radius: 14px; padding: 8px 0; font-size: 2.2rem;
+            box-shadow: 0 5px 0 var(--metal-heavy), 0 8px 10px rgba(0,0,0,0.3); cursor: pointer; transition: all 0.1s; display: flex; justify-content: center; align-items: center;
         }
-        .rps-btn:active { transform: translateY(6px); box-shadow: 0 0 0 var(--metal-heavy), 0 4px 5px rgba(0,0,0,0.2); }
-        .rps-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: translateY(6px); box-shadow: 0 0 0 var(--metal-heavy); filter: grayscale(50%);}
+        .rps-btn:active { transform: translateY(5px); box-shadow: 0 0 0 var(--metal-heavy), 0 3px 4px rgba(0,0,0,0.2); }
+        .rps-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: translateY(5px); box-shadow: 0 0 0 var(--metal-heavy); filter: grayscale(50%);}
 
         /* --- End Screen Modal --- */
         #victory-screen {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.95); backdrop-filter: blur(8px); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 100; opacity: 0; pointer-events: none; transition: opacity 0.5s; padding: 20px;
         }
         #victory-screen.visible { opacity: 1; pointer-events: all; }
-        .victory-art { font-size: 5.5rem; margin-bottom: 5px; animation: float 2s infinite ease-in-out; filter: drop-shadow(0 10px 10px rgba(0,0,0,0.1)); }
-        .victory-title { color: #ff4757; font-size: 2.5rem; font-weight: 900; line-height: 1.1; margin-bottom: 10px; text-align: center; text-shadow: 2px 2px 0px #ffeaa7;}
-        .victory-msg { color: #334155; font-size: 1.15rem; text-align: center; margin-bottom: 30px; font-weight: 700;}
-        .play-again-btn { background: linear-gradient(135deg, #ff9a9e, #fecfef); color: #d61f3d; border: none; padding: 15px 40px; font-size: 1.4rem; font-weight: 900; border-radius: 30px; box-shadow: 0 6px 0 #ff758c, 0 10px 20px rgba(255, 117, 140, 0.4); cursor: pointer; transition: transform 0.1s; }
-        .play-again-btn:active { transform: translateY(6px); box-shadow: 0 0 0 #ff758c; }
+        .victory-art { font-size: 5rem; margin-bottom: 5px; animation: float 2s infinite ease-in-out; filter: drop-shadow(0 8px 8px rgba(0,0,0,0.1)); }
+        .victory-title { color: #ff4757; font-size: 2.2rem; font-weight: 900; line-height: 1.1; margin-bottom: 10px; text-align: center; text-shadow: 2px 2px 0px #ffeaa7;}
+        .victory-msg { color: #334155; font-size: 1rem; text-align: center; margin-bottom: 25px; font-weight: 700;}
+        .play-again-btn { background: linear-gradient(135deg, #ff9a9e, #fecfef); color: #d61f3d; border: none; padding: 12px 35px; font-size: 1.2rem; font-weight: 900; border-radius: 25px; box-shadow: 0 5px 0 #ff758c, 0 8px 15px rgba(255, 117, 140, 0.4); cursor: pointer; transition: transform 0.1s; }
+        .play-again-btn:active { transform: translateY(5px); box-shadow: 0 0 0 #ff758c; }
 
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
         .bounce { animation: mini-bounce 0.4s ease-in-out; }
         @keyframes mini-bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
         .shake { animation: shake 0.4s ease-in-out; }
@@ -295,8 +248,10 @@
 <body>
 
 <div id="phone-screen">
+    <!-- LED stays small at the top -->
     <div id="led-container"><div class="scrolling-text">पुढील स्थानक: पनवेल | NEXT STATION: PANVEL &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; पुढील स्थानक: पनवेल | NEXT STATION: PANVEL</div></div>
     
+    <!-- Ceiling stays small at the top -->
     <div id="ceiling-rig">
         <div class="ceiling-fixtures"><div class="fan-grill"></div><div class="tube-light"></div><div class="fan-grill"></div></div>
         <div class="grab-rail">
@@ -317,7 +272,7 @@
         </div>
     </div>
 
-    <!-- Main Scene -->
+    <!-- Main Scene (Flexes to fill exact space without pushing controls down) -->
     <div id="diorama">
         <div class="metal-wall"></div>
         <div class="luggage-rack"></div>
@@ -443,7 +398,7 @@
         </div>
     </div>
 
-    <!-- User Selection Options -->
+    <!-- User Selection Options (Fixed at bottom) -->
     <div id="controls-section">
         <div class="controls-header" id="turn-instruction">Shahin, make your move! ✨</div>
         <div class="button-group">
@@ -558,7 +513,6 @@
             sahilScore++;
             document.getElementById('score-sahil').innerText = sahilScore;
             
-            // Pop the speech bubble for Sahil
             sahilSpeech.innerText = randomPhrase;
             sahilSpeech.classList.add('show-speech');
             
@@ -575,7 +529,6 @@
             shahinScore++;
             document.getElementById('score-shahin').innerText = shahinScore;
             
-            // Pop the speech bubble for Shahin
             shahinSpeech.innerText = randomPhrase;
             shahinSpeech.classList.add('show-speech');
             
